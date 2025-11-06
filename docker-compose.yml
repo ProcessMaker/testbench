@@ -2,7 +2,6 @@ services:
   generate-certs:
     image: smallstep/step-ca:latest
     container_name: generate-certs
-    user: "${UID:-1000}:${GID:-1000}"
     volumes:
       - ${CONTEXT_PATH}/certs:/tmp/step-ca
     working_dir: /tmp/step-ca
