@@ -58,3 +58,6 @@ services/dms
 gmail.json
 sites.json.bak
 .envrc
+
+services/certs/*
+!services/certs/generate-certs.sh
