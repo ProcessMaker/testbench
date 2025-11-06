@@ -8,7 +8,7 @@ step certificate create "Smallstep Root CA" "demoCA/cacert.pem" "demoCA/cakey.pe
   --not-after "2031-01-01T00:00:00+00:00" \
   --san "example.test" \
   --san "mail.example.test" \
-  --kty RSA --size 2048
+  --kty RSA --size 2048 --force
 
 step certificate create "Smallstep Leaf" mail.example.test-cert.pem mail.example.test-key.pem \
   --no-password --insecure \
@@ -19,4 +19,4 @@ step certificate create "Smallstep Leaf" mail.example.test-cert.pem mail.example
   --not-after "2031-01-01T00:00:00+00:00" \
   --san "example.test" \
   --san "mail.example.test" \
-  --kty RSA --size 2048
+  --kty RSA --size 2048 --force

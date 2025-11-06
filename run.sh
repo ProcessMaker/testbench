@@ -7,7 +7,10 @@ if [ -z "$SITE_NAME" ]; then
     exit 1
 fi
 
-npm run ci-sites
+# if INSTANCE does not equal local, run ci-sites
+if [ "$INSTANCE" != "local" ]; then
+    npm run ci-sites
+fi
 
 npm run get-token
 
