@@ -54,6 +54,8 @@ services:
       - MULTITENANCY=${MULTITENANCY}
       - INSTANCE=${INSTANCE}
       - SITE_NAME=${SITE_NAME}
+      - INSTANCE_USERNAME=${INSTANCE_USERNAME}
+      - INSTANCE_PASSWORD=${INSTANCE_PASSWORD}
     volumes:
       - ./sites.json:/app/sites.json
       - ./.env:/app/.env:ro
