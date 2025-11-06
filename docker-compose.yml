@@ -8,6 +8,8 @@ services:
       - "--all"
       - "--config"
       - "/etc/ngrok.yml"
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
     volumes:
       - ${CONTEXT_PATH}/ngrok.yml:/etc/ngrok.yml
     ports:

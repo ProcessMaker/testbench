@@ -1,8 +1,5 @@
 version: 3
 
-agent:
-  authtoken: 21bs5Jy6n321E5OMQMWy1x8E6Oc_7Zu2jwoAPTG9xSqJMdf2U
-
 tunnels:
   smtp:
     addr: mailserver:587
