@@ -50,6 +50,10 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: testbench
+    environment:
+      - MULTITENANCY=${MULTITENANCY}
+      - INSTANCE=${INSTANCE}
+      - SITE_NAME=${SITE_NAME}
     volumes:
       - ./sites.json:/app/sites.json
       - ./.env:/app/.env:ro
