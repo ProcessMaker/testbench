@@ -1,0 +1,16 @@
+{
+    "abe_imap_server": "",
+    "abe_imap_port": "",
+    "abe_imap_username": "abe-imap@example.test",
+    "abe_imap_password": "password",
+    "abe_imap_path": "INBOX",
+    "abe_imap_interval": "1",
+    "EMAIL_CONNECTOR_MAIL_FROM_ADDRESS": "sender@exmaple.test",
+    "EMAIL_CONNECTOR_MAIL_FROM_NAME": "Sender",
+    "EMAIL_CONNECTOR_MAIL_HOST": "",
+    "EMAIL_CONNECTOR_MAIL_PORT": "",
+    "EMAIL_CONNECTOR_MAIL_USERNAME": "sender@example.test",
+    "EMAIL_CONNECTOR_MAIL_PASSWORD": "password",
+    "EMAIL_CONNECTOR_MAIL_AUTH_METHOD": "0",
+    "EMAIL_CONNECTOR_MAIL_ENCRYPTION": "1"
+}

@@ -1,0 +1,4 @@
+# All passwords are "password"
+abe-imap@example.test|{SHA512-CRYPT}$6$ZCydzmeJW33TrSaH$b75W1MHwjrrNeAZomSqo3r6GRLxNSM32vs6LqQsI2jmKYKyGqxmASmUFXrglFrNmBeDifegBRKsouEFHl6zF7/
+sender@example.test|{SHA512-CRYPT}$6$ZCydzmeJW33TrSaH$b75W1MHwjrrNeAZomSqo3r6GRLxNSM32vs6LqQsI2jmKYKyGqxmASmUFXrglFrNmBeDifegBRKsouEFHl6zF7/
+receiver@example.test|{SHA512-CRYPT}$6$ZCydzmeJW33TrSaH$b75W1MHwjrrNeAZomSqo3r6GRLxNSM32vs6LqQsI2jmKYKyGqxmASmUFXrglFrNmBeDifegBRKsouEFHl6zF7/

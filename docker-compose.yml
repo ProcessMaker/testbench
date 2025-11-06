@@ -1,0 +1,61 @@
+services:
+  ngrok:
+    # NOTE: Once this has started get the public urls from: http://ngrok:4040/api/tunnels
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ${CONTEXT_PATH}/ngrok.yml:/etc/ngrok.yml
+    ports:
+      - 4040:4040
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4040/api/tunnels"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: mailserver
+    # Provide the FQDN of your mail server here (Your DNS MX record should point to this value)
+    hostname: mail.example.test
+    env_file: ${CONTEXT_PATH}/mailserver.env
+    # More information about the mail-server ports:
+    # https://docker-mailserver.github.io/docker-mailserver/latest/config/security/understanding-the-ports/
+    ports:
+      - "587:587" # ESMTP (explicit TLS => STARTTLS)
+      - "993:993" # IMAP4 (implicit TLS)
+    volumes:
+      - ${CONTEXT_PATH}/dms/mail-data/:/var/mail/
+      - ${CONTEXT_PATH}/dms/mail-state/:/var/mail-state/
+      - ${CONTEXT_PATH}/dms/mail-logs/:/var/log/mail/
+      - ${CONTEXT_PATH}/dms/config/:/tmp/docker-mailserver/
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONTEXT_PATH}/postfix-accounts.cf:/tmp/docker-mailserver/postfix-accounts.cf
+      - ${CONTEXT_PATH}/certs/:/tmp/docker-mailserver/ssl/
+    restart: always
+    stop_grace_period: 1m
+    healthcheck:
+      test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"
+      timeout: 3s
+      retries: 0
+  testbench:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: testbench
+    volumes:
+      - ./sites.json:/app/sites.json
+      - ./.env:/app/.env:ro
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+      # for making changes to code without rebuilding the container
+      - ./src:/app/src
+    depends_on:
+      - mailserver
+      - ngrok
+    restart: unless-stopped
