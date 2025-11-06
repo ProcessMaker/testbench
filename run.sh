@@ -1,6 +1,13 @@
 #!/bin/sh
 set -e
-export SITE_NAME=COM2
+
+# Exit if SITE_NAME is not set
+if [ -z "$SITE_NAME" ]; then
+    echo "SITE_NAME is not set"
+    exit 1
+fi
+
+npm run ci-sites
 
 npm run get-token
 
