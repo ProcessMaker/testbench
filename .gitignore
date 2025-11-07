@@ -55,9 +55,7 @@ playwright/.cache/
 
 
 services/dms
+services/certs
 gmail.json
 sites.json.bak
 .envrc
-
-services/certs/*
-!services/certs/generate-certs.sh
