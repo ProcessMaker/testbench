@@ -4,8 +4,8 @@ services:
     container_name: generate-certs
     volumes:
       - ${CONTEXT_PATH}/certs:/tmp/step-ca
-    working_dir: /tmp/step-ca
-    entrypoint: ["/bin/sh", "/tmp/step-ca/generate-certs.sh"]
+      - ${CONTEXT_PATH}/certs/generate-certs.sh:/tmp/generate-certs.sh:ro
+    entrypoint: ["/bin/sh", "/tmp/generate-certs.sh"]
     restart: "no"
   ngrok:
     # NOTE: Once this has started get the public urls from: http://ngrok:4040/api/tunnels
