@@ -28,6 +28,7 @@ if [ "${#missing_vars[@]}" -ne 0 ]; then
 fi
 
 mkdir -p services/dms
+mkdir -p services/certs
 docker compose down -v --remove-orphans
 docker compose run generate-certs
 docker compose up mailserver testbench ngrok --abort-on-container-exit --exit-code-from testbench
