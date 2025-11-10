@@ -27,6 +27,8 @@ if [ "${#missing_vars[@]}" -ne 0 ]; then
   exit 1
 fi
 
+export USER_GROUP=$(id -u):$(id -g)
+
 mkdir -p services/dms
 mkdir -p services/certs
 docker compose down -v --remove-orphans

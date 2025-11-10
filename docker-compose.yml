@@ -5,7 +5,7 @@ services:
     volumes:
       - ${CONTEXT_PATH}/certs/:/tmp/step-ca
       - ${CONTEXT_PATH}/generate-certs.sh:/tmp/generate-certs.sh
-    user: 1000:1000
+    user: ${USER_GROUP}
     working_dir: /tmp/step-ca
     entrypoint: ["/bin/sh", "/tmp/generate-certs.sh"]
     restart: "no"
