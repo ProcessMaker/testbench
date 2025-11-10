@@ -6,6 +6,7 @@ import { Site } from '../types/site';
 export const ciSitesCommand = new Command('ci-sites')
     .description('Generate CI sites configuration from environment variables')
     .action(async () => {
+        console.log('Generating CI sites configuration from environment variables');
         const instance = process.env.INSTANCE;
         if (!instance) {
             throw new Error('INSTANCE environment variable is required');

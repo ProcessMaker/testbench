@@ -3,8 +3,9 @@ services:
     image: smallstep/step-ca:latest
     container_name: generate-certs
     volumes:
-      - ${CONTEXT_PATH}/certs:/tmp/step-ca
-      - ${CONTEXT_PATH}/services/certs/generate-certs.sh:/tmp/generate-certs.sh
+      - ${CONTEXT_PATH}/certs/:/tmp/step-ca
+      - ${CONTEXT_PATH}/generate-certs.sh:/tmp/generate-certs.sh
+    user: 1000:1000
     working_dir: /tmp/step-ca
     entrypoint: ["/bin/sh", "/tmp/generate-certs.sh"]
     restart: "no"
@@ -31,15 +32,10 @@ services:
       start_period: 10s
   mailserver:
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    stop_grace_period: 5s
     container_name: mailserver
-    # Provide the FQDN of your mail server here (Your DNS MX record should point to this value)
     hostname: mail.example.test
     env_file: ${CONTEXT_PATH}/mailserver.env
-    depends_on:
-      generate-certs:
-        condition: service_completed_successfully
-    # More information about the mail-server ports:
-    # https://docker-mailserver.github.io/docker-mailserver/latest/config/security/understanding-the-ports/
     ports:
       - "587:587" # ESMTP (explicit TLS => STARTTLS)
       - "993:993" # IMAP4 (implicit TLS)
@@ -52,7 +48,6 @@ services:
       - ${CONTEXT_PATH}/postfix-accounts.cf:/tmp/docker-mailserver/postfix-accounts.cf
       - ${CONTEXT_PATH}/certs/:/tmp/docker-mailserver/ssl/
     restart: always
-    stop_grace_period: 1m
     healthcheck:
       test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"
       timeout: 3s
