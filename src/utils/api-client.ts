@@ -49,6 +49,7 @@ export function apiClient(site: Site): AxiosInstance {
 
             console.error(`❌ API Request Failed:`);
             console.error(`   Method: ${method}`);
+            console.error(`   Base URL: ${site.url}`);
             console.error(`   URL: ${url}`);
             console.error(`   Status: ${status} ${statusText}`);
             console.error(`   Response: ${responseMessage}`);

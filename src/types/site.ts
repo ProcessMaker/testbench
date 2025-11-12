@@ -6,7 +6,7 @@ export interface Site {
     password?: string;
     scriptExecutorId: number;
     mailConfig: string;
-    ngrokContainer?: string;
+    useTunnel?: boolean;
 }
 
 export type Sites = Site[];

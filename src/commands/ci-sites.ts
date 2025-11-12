@@ -20,7 +20,7 @@ export const ciSitesCommand = new Command('ci-sites')
             bearerToken: '',
             scriptExecutorId: 1,
             mailConfig: 'dms.json',
-            ngrokContainer: 'http://ngrok:4040',
+            useTunnel: true,
         };
 
         if (isMultitenancy) {

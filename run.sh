@@ -7,15 +7,14 @@ if [ -z "$SITE_NAME" ]; then
     exit 1
 fi
 
-# if INSTANCE does not equal local, run ci-sites
 if [ "$INSTANCE" != "local" ]; then
     npm run ci-sites
 fi
 
+# npm run debug-tunnels
+
 npm run get-token
 
 npm run update-server -- --script=configure-email
-
-npx playwright test test-script.spec.ts
 
 npx playwright test test-abe.spec.ts

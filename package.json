@@ -20,6 +20,7 @@
     "get-token": "playwright test src/actions/playwright/get-token.spec.ts",
     "update-server": "tsx src/index.ts update-server",
     "ci-sites": "tsx src/index.ts ci-sites",
+    "debug-tunnels": "tsx src/index.ts debug-tunnels",
     "smoketest": "playwright test src/tests"
   },
   "keywords": [

@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import nodemailer from 'nodemailer';
 import { ActionOptions } from '../types/action';
-import { fetchNgrokTunnels, applyNgrokSubstitution } from '../utils/ngrok-substitution';
+import { fetchTunnelUrls, applyTunnelSubstitution } from '../utils/tunnel-substitution';
 
 interface MailtoData {
     to: string;
@@ -100,13 +100,17 @@ export async function replyToMail(options: ActionOptions = {}): Promise<number> 
         throw new Error(`Failed to load email settings from ${settingsPath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
-    // If ngrokContainer is specified, fetch tunnel information and update IMAP settings
-    if (site.ngrokContainer) {
+    // If useTunnel is true, fetch tunnel information and update IMAP settings
+    if (site.useTunnel) {
+        const tcpTunnels = process.env.TCP_TUNNELS;
+        if (!tcpTunnels) {
+            throw new Error('TCP_TUNNELS environment variable is required when useTunnel is true');
+        }
         try {
-            const tunnels = await fetchNgrokTunnels(site.ngrokContainer);
-            applyNgrokSubstitution(settings, tunnels);
+            const tunnels = await fetchTunnelUrls(tcpTunnels);
+            applyTunnelSubstitution(settings, tunnels);
         } catch (error) {
-            throw new Error(`Failed to apply ngrok substitution: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            throw new Error(`Failed to apply tunnel substitution: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }
 

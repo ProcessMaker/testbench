@@ -9,26 +9,21 @@ services:
     working_dir: /tmp/step-ca
     entrypoint: ["/bin/sh", "/tmp/generate-certs.sh"]
     restart: "no"
-  ngrok:
-    # NOTE: Once this has started get the public urls from: http://ngrok:4040/api/tunnels
-    image: ngrok/ngrok:latest
-    restart: unless-stopped
-    command:
-      - "start"
-      - "--all"
-      - "--config"
-      - "/etc/ngrok.yml"
-    environment:
-      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
-    volumes:
-      - ${CONTEXT_PATH}/ngrok.yml:/etc/ngrok.yml
+  tunnel:
+    build:
+      dockerfile: Dockerfile.tunnel
+    container_name: tunnel
+    command: ["/bin/sh", "/tunnel.sh"]
     ports:
-      - 4040:4040
+      - "4300:4300"
+      - "4301:4301"
+    environment:
+      - TCP_TUNNELS=${TCP_TUNNELS}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4040/api/tunnels"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      test: ["CMD", "curl", "-f", "http://localhost:4300/urls"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
       start_period: 10s
   mailserver:
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
@@ -63,6 +58,8 @@ services:
       - SITE_NAME=${SITE_NAME}
       - INSTANCE_USERNAME=admin
       - INSTANCE_PASSWORD=${INSTANCE_PASSWORD}
+      - TCP_TUNNELS=${TCP_TUNNELS}
+      - TUNNEL_SERVICE_URL=${TUNNEL_SERVICE_URL}
     volumes:
       - ./sites.json:/app/sites.json
       - ./playwright-report:/app/playwright-report
@@ -70,6 +67,8 @@ services:
       # for making changes to code without rebuilding the container
       - ./src:/app/src
     depends_on:
-      - mailserver
-      - ngrok
+      mailserver:
+        condition: service_healthy
+      tunnel:
+        condition: service_healthy
     restart: unless-stopped

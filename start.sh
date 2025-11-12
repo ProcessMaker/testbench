@@ -6,7 +6,6 @@ missing_vars=()
 required_env_vars=(
   "CONTEXT_PATH"
   "GITHUB_TOKEN"
-  "NGROK_AUTHTOKEN"
   "MULTITENANCY"
   "INSTANCE"
   "SITE_NAME"
@@ -28,9 +27,14 @@ if [ "${#missing_vars[@]}" -ne 0 ]; then
 fi
 
 export USER_GROUP=$(id -u):$(id -g)
+export TCP_TUNNELS="mailserver:587 mailserver:993"
+export TUNNEL_SERVICE_URL="http://tunnel"
 
 mkdir -p services/dms
 mkdir -p services/certs
+rm -rf services/dms/* || true
+rm -rf services/certs/* || true
+
 docker compose down -v --remove-orphans
 docker compose run generate-certs
-docker compose up mailserver testbench ngrok --abort-on-container-exit --exit-code-from testbench
+docker compose up mailserver testbench tunnel --abort-on-container-exit --exit-code-from testbench

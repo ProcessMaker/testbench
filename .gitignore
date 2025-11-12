@@ -59,3 +59,4 @@ services/certs
 gmail.json
 sites.json.bak
 .envrc
+sites.json

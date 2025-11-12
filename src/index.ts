@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { config } from 'dotenv';
 import { updateServerCommand } from './commands/update-server';
 import { ciSitesCommand } from './commands/ci-sites';
+import { debugTunnelsCommand } from './commands/debug-tunnels';
 
 // Load environment variables
 config();
@@ -18,6 +19,7 @@ program
 // Add commands
 program.addCommand(updateServerCommand);
 program.addCommand(ciSitesCommand);
+program.addCommand(debugTunnelsCommand);
 
 // Parse command line arguments
 program.parse();

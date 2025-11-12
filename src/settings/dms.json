@@ -12,5 +12,19 @@
     "EMAIL_CONNECTOR_MAIL_USERNAME": "sender@example.test",
     "EMAIL_CONNECTOR_MAIL_PASSWORD": "password",
     "EMAIL_CONNECTOR_MAIL_AUTH_METHOD": "0",
-    "EMAIL_CONNECTOR_MAIL_ENCRYPTION": "1"
+    "EMAIL_CONNECTOR_MAIL_ENCRYPTION": "1",
+    "services.ldap.enabled": "1",
+    "services.ldap.cron.period": "{\"quantity\":1,\"units\":\"days\"}",
+    "services.ldap.type": "openldap",
+    "services.ldap.server.address": "",
+    "services.ldap.server.port": "",
+    "services.ldap.server.tls": "0",
+    "services.ldap.base_dn": "dc=planetexpress3,dc=com",
+    "services.ldap.authentication.username": "cn=admin,dc=planetexpress,dc=com",
+    "services.ldap.authentication.password": "GoodNewsEveryone",
+    "services.ldap.groups": "[\"admin_staff\",\"ship_crew\"]",
+    "services.ldap.departments": "[]",
+    "services.ldap.identifiers.user": "uid",
+    "services.ldap.identifiers.group": "cn",
+    "services.ldap.variables": "{\"email\":\"mail\",\"firstname\":\"givenName\",\"lastname\":\"sn\",\"username\":\"uid\",\"address\":null,\"city\":null,\"state\":null,\"postal\":null,\"country\":null,\"phone\":null,\"fax\":null,\"cell\":null,\"title\":null,\"birthdate\":null}"
 }

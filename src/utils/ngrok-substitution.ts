@@ -17,7 +17,7 @@ export interface ParsedTunnelUrl {
 /**
  * Fetches tunnel information from ngrok container and returns parsed tunnel data
  * @param ngrokContainerUrl - The ngrok container URL (e.g., "http://ngrok:4040")
- * @returns Object containing SMTP and IMAP tunnel information
+ t @returns Object containing SMTP and IMAP tunnel information
  */
 export async function fetchNgrokTunnels(ngrokContainerUrl: string): Promise<{
     smtp?: ParsedTunnelUrl;
