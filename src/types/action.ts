@@ -1,8 +1,9 @@
-import { Site } from './site';
+import { Site } from '../models/Site';
 
 export interface ActionOptions {
     verbose?: boolean;
     site?: Site;
+    email?: string;
 }
 
 export interface TestRunnerOptions {

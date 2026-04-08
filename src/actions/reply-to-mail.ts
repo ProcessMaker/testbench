@@ -1,9 +1,9 @@
 import Imap from 'imap';
-import fs from 'fs';
 import path from 'path';
 import nodemailer from 'nodemailer';
 import { ActionOptions } from '../types/action';
-import { fetchTunnelUrls, applyTunnelSubstitution } from '../utils/tunnel-substitution';
+import { fetchTunnelUrls } from '../utils/tunnel-substitution';
+import { Settings } from '../models/Settings';
 
 interface MailtoData {
     to: string;
@@ -82,7 +82,7 @@ function createSmtpTransporter(settings: Record<string, string>): nodemailer.Tra
 }
 
 export async function replyToMail(options: ActionOptions = {}): Promise<number> {
-    const { site } = options;
+    const { site, email } = options;
 
     if (!site) {
         throw new Error('Site configuration is required for mail processing');
@@ -92,13 +92,13 @@ export async function replyToMail(options: ActionOptions = {}): Promise<number> 
     const mailConfigFile = site.mailConfig || 'gmail.json';
     const settingsPath = path.join(__dirname, '..', 'settings', mailConfigFile);
 
-    let settings: Record<string, string>;
-    try {
-        const settingsData = fs.readFileSync(settingsPath, 'utf8');
-        settings = JSON.parse(settingsData);
-    } catch (error) {
-        throw new Error(`Failed to load email settings from ${settingsPath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
+    // Load settings using the Settings model (applyDefaults is called automatically)
+    const settingsModel = Settings.load(settingsPath);
+
+    // Override with email parameter if provided
+    settingsModel.set('EMAIL_CONNECTOR_MAIL_USERNAME', email || site.receiverAccount);
+    settingsModel.set('EMAIL_CONNECTOR_MAIL_FROM_ADDRESS', email || site.receiverAccount);
+    settingsModel.set('abe_imap_username', email || site.receiverAccount);
 
     // If useTunnel is true, fetch tunnel information and update IMAP settings
     if (site.useTunnel) {
@@ -108,31 +108,49 @@ export async function replyToMail(options: ActionOptions = {}): Promise<number> 
         }
         try {
             const tunnels = await fetchTunnelUrls(tcpTunnels);
-            applyTunnelSubstitution(settings, tunnels);
+            settingsModel.applyTunnelSubstitution(tunnels);
         } catch (error) {
             throw new Error(`Failed to apply tunnel substitution: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }
 
-    // Extract IMAP settings (ignore abe_imap_interval as requested)
+    // Get settings as a record for compatibility with existing code
+    const settings = settingsModel.toRecord();
+
+    const checkForMissingOrEmptySettings = (obj: Record<string, any>, keys: string[]) => {
+        const missingOrEmptyKeys: string[] = [];
+        for (const name of keys) {
+            const key = name as keyof typeof obj;
+            if (!obj[key] || obj[key].toString().trim() === '') {
+                missingOrEmptyKeys.push(key);
+            }
+        }
+        if (missingOrEmptyKeys.length > 0) {
+            throw new Error(
+                `Missing required settings: ${missingOrEmptyKeys.join(', ')}`
+            );
+        }
+    };
+
+    // Validate email settings
+    checkForMissingOrEmptySettings(settings, [
+        'EMAIL_CONNECTOR_MAIL_HOST',
+        'EMAIL_CONNECTOR_MAIL_USERNAME',
+        'EMAIL_CONNECTOR_MAIL_PASSWORD',
+        'abe_imap_username',
+        'abe_imap_password',
+        'abe_imap_server'
+    ]);
+
+    // Extract IMAP settings
     const imapConfig = {
-        user: 'receiver@example.test',
+        user: settings.abe_imap_username,
         password: settings.abe_imap_password,
         host: settings.abe_imap_server,
         port: parseInt(settings.abe_imap_port) || 993,
         tls: true,
         tlsOptions: { rejectUnauthorized: false }
-    };
-
-    // Validate required IMAP settings
-    if (!imapConfig.user || !imapConfig.password || !imapConfig.host) {
-        throw new Error('Missing required IMAP settings: abe_imap_username, abe_imap_password, or abe_imap_server ' + JSON.stringify(imapConfig));
-    }
-
-    // Validate required SMTP settings
-    if (!settings.EMAIL_CONNECTOR_MAIL_HOST || !settings.EMAIL_CONNECTOR_MAIL_USERNAME || !settings.EMAIL_CONNECTOR_MAIL_PASSWORD) {
-        throw new Error('Missing required SMTP settings: EMAIL_CONNECTOR_MAIL_HOST, EMAIL_CONNECTOR_MAIL_USERNAME, or EMAIL_CONNECTOR_MAIL_PASSWORD');
-    }
+    } as Imap.Config;
 
     // Create SMTP transporter
     const transporter = createSmtpTransporter(settings);

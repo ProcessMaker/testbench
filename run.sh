@@ -7,11 +7,11 @@ if [ -z "$SITE_NAME" ]; then
     exit 1
 fi
 
-if [ "$INSTANCE" != "local" ]; then
-    npm run ci-sites
-fi
+# npm run ci-sites
 
-# npm run debug-tunnels
+
+
+npm run debug-tunnels
 
 npm run get-token
 
@@ -20,3 +20,5 @@ npm run update-server -- --script=configure-email
 npx playwright test test-script.spec.ts
 
 npx playwright test test-abe.spec.ts
+
+npx playwright test test-collections.spec.ts

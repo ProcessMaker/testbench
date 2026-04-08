@@ -11,7 +11,6 @@ test('testActionsByEmail', async ({ page }) => {
   await signInAsAdmin(page, site);
   console.log('Importing process');
   await importProcess(page, baseUrl, path.join(__dirname, '..', 'processes', 'abe.json'));
-
   const processId = page.url().split('/').pop();
 
   console.log('Process ID: ', processId);
@@ -22,6 +21,13 @@ test('testActionsByEmail', async ({ page }) => {
 
   const webEntryUrl = `${baseUrl}/webentry/${processId}/node_1`;
   await page.goto(webEntryUrl);
+
+  // Wait for "New Input" to be visible
+  expect(page.getByText("New Input")).toBeVisible();
+
+  // Fill receiver_account textbox with the username part of site.receiverAccount (before "@")
+  const receiverUsername = site.receiverAccount ? site.receiverAccount.split('@')[0] : 'receiver';
+  await page.locator('input[name="receiver_account"]').fill(receiverUsername);
 
   // Click on the  Send Action By Email  button
   console.log('Clicking on Send Action By Email button');
@@ -38,7 +44,7 @@ test('testActionsByEmail', async ({ page }) => {
 
   for (let attempt = 1; attempt <= maxTries; attempt++) {
     console.log(`Calling replyToMail (attempt ${attempt}/${maxTries}) to process email`);
-    repliedCount = await replyToMail({ site });
+    repliedCount = await replyToMail({ site, email: site.receiverAccount });
 
     if (repliedCount > 0) {
       console.log(`✅ Successfully replied to ${repliedCount} email(s) on attempt ${attempt}`);
@@ -60,4 +66,11 @@ test('testActionsByEmail', async ({ page }) => {
     state: 'visible',
     timeout: 300000 // 5 minutes
   });
+
+  // Click the "Complete Process" button
+  console.log('Clicking the "Complete Process" button');
+  await page.getByRole('button', { name: 'Complete Process' }).click();
+
+  // Wait for the page to load
+  await page.waitForLoadState('networkidle');
 });

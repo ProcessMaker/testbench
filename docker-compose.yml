@@ -3,7 +3,7 @@ services:
     image: smallstep/step-ca:latest
     container_name: generate-certs
     volumes:
-      - ${CONTEXT_PATH}/certs/:/tmp/step-ca
+      - ${CONTEXT_PATH}/docker-mailserver/ssl/:/tmp/step-ca
       - ${CONTEXT_PATH}/generate-certs.sh:/tmp/generate-certs.sh
     user: ${USER_GROUP}
     working_dir: /tmp/step-ca
@@ -35,13 +35,15 @@ services:
       - "587:587" # ESMTP (explicit TLS => STARTTLS)
       - "993:993" # IMAP4 (implicit TLS)
     volumes:
-      - ${CONTEXT_PATH}/dms/mail-data/:/var/mail/
-      - ${CONTEXT_PATH}/dms/mail-state/:/var/mail-state/
-      - ${CONTEXT_PATH}/dms/mail-logs/:/var/log/mail/
-      - ${CONTEXT_PATH}/dms/config/:/tmp/docker-mailserver/
+      # - ${CONTEXT_PATH}/docker-mailserver-var/mail-data/:/var/mail/
+      # - ${CONTEXT_PATH}/docker-mailserver-var/mail-state/:/var/mail-state/
+      # - ${CONTEXT_PATH}/docker-mailserver-var/mail-logs/:/var/log/mail/
+
+      - ${CONTEXT_PATH}/docker-mailserver/:/tmp/docker-mailserver/
+      # - ${CONTEXT_PATH}/postfix-accounts.cf:/tmp/docker-mailserver/postfix-accounts.cf
+      # - ${CONTEXT_PATH}/certs/:/tmp/docker-mailserver/ssl/
+
       - /etc/localtime:/etc/localtime:ro
-      - ${CONTEXT_PATH}/postfix-accounts.cf:/tmp/docker-mailserver/postfix-accounts.cf
-      - ${CONTEXT_PATH}/certs/:/tmp/docker-mailserver/ssl/
     restart: always
     healthcheck:
       test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"

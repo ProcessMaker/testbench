@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
-import { Site } from '../types/site';
+import { Site } from '../models/Site';
 
 export const ciSitesCommand = new Command('ci-sites')
     .description('Generate CI sites configuration from environment variables')
@@ -13,10 +13,10 @@ export const ciSitesCommand = new Command('ci-sites')
         }
 
         const isMultitenancy = process.env.MULTITENANCY === 'true';
-        const sites: Site[] = [];
+        const sites: ConstructorParameters<typeof Site>[0][] = [];
 
         // Base site configuration (common properties)
-        const baseSite: Omit<Site, 'name' | 'url'> = {
+        const baseSite: Omit<ConstructorParameters<typeof Site>[0], 'name' | 'url'> = {
             bearerToken: '',
             scriptExecutorId: 1,
             mailConfig: 'dms.json',
@@ -27,19 +27,25 @@ export const ciSitesCommand = new Command('ci-sites')
             // Multitenancy mode: create 3 sites with tenant-X prefix
             for (let i = 0; i < 3; i++) {
                 const siteNumber = i + 1;
-                const site: Site = {
+                const site: ConstructorParameters<typeof Site>[0] = {
                     ...baseSite,
                     name: `CI${siteNumber}`,
                     url: `https://tenant-${siteNumber}.ci-${instance}.engk8s.processmaker.net`,
+                    imapAccount: `abe-imap-${siteNumber}@example.test`,
+                    senderAccount: `sender-${siteNumber}@example.test`,
+                    receiverAccount: `receiver-${siteNumber}@example.test`,
                 };
                 sites.push(site);
             }
         } else {
             // Single site mode: create 1 site without tenant prefix
-            const site: Site = {
+            const site: ConstructorParameters<typeof Site>[0] = {
                 ...baseSite,
                 name: 'CI1',
                 url: `https://ci-${instance}.engk8s.processmaker.net`,
+                imapAccount: 'abe-imap@example.test',
+                senderAccount: 'sender@example.test',
+                receiverAccount: 'receiver@example.test',
             };
             sites.push(site);
         }

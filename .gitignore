@@ -60,3 +60,6 @@ gmail.json
 sites.json.bak
 .envrc
 sites.json
+
+__pycache__/
+venv/

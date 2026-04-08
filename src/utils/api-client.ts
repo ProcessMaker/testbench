@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosError } from "axios";
 import { validateEnvironment } from "../config";
-import { Site } from "../types/site";
+import { Site } from "../models/Site";
 import axios from "axios";
 
 export function apiClient(site: Site): AxiosInstance {

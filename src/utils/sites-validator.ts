@@ -1,5 +1,5 @@
 import Ajv from 'ajv';
-import { Site, Sites } from '../types/site';
+import { Site, Sites } from '../models/Site';
 import siteSchema from '../schemas/site-schema.json';
 
 const ajv = new Ajv();

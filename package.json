@@ -21,7 +21,8 @@
     "update-server": "tsx src/index.ts update-server",
     "ci-sites": "tsx src/index.ts ci-sites",
     "debug-tunnels": "tsx src/index.ts debug-tunnels",
-    "smoketest": "playwright test src/tests"
+    "smoketest": "playwright test src/tests",
+    "reply-to-mail": "tsx src/index.ts update-server --script=reply-to-mail"
   },
   "keywords": [
     "cli",

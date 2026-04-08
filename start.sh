@@ -30,11 +30,14 @@ export USER_GROUP=$(id -u):$(id -g)
 export TCP_TUNNELS="mailserver:587 mailserver:993"
 export TUNNEL_SERVICE_URL="http://tunnel"
 
-mkdir -p services/dms
-mkdir -p services/certs
-rm -rf services/dms/* || true
-rm -rf services/certs/* || true
+mkdir -p context/docker-mailserver
+rm -rf context/docker-mailserver/* || true
 
 docker compose down -v --remove-orphans
 docker compose run generate-certs
-docker compose up mailserver testbench tunnel --abort-on-container-exit --exit-code-from testbench
+
+# Run on Github Actions
+# docker compose up mailserver testbench tunnel --abort-on-container-exit --exit-code-from testbench
+
+# Run locally
+docker compose up mailserver tunnel

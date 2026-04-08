@@ -1,12 +1,14 @@
 import { Page, expect } from '@playwright/test';
 import { apiClient } from './api-client';
 import sitesData from '@sites.json';
-import { Site, Sites } from '../types/site';
+import { Site, Sites } from '../models/Site';
 import { AxiosInstance } from 'axios';
 import fs from 'fs';
 
-// Type assertion to ensure sites matches Site[] interface
-const sites = sitesData as Sites;
+// Convert JSON data to Site instances
+const sites: Sites = (sitesData as ConstructorParameters<typeof Site>[0][]).map(
+    (data) => new Site(data)
+);
 
 /**
  * Get site configuration by name from environment variable or default
@@ -26,6 +28,17 @@ export function getSiteConfig(): Site {
 }
 
 export function setSiteConfig(site: Site): void {
+    // Reload fresh config from sites.json to avoid overwriting changes from other processes
+    const sitesJsonPath = 'sites.json';
+    const freshSitesData = JSON.parse(fs.readFileSync(sitesJsonPath, 'utf-8'));
+    const freshSites: Sites = (freshSitesData as ConstructorParameters<typeof Site>[0][]).map(
+        (data) => new Site(data)
+    );
+
+    // Update the in-memory sites array with fresh data
+    sites.length = 0;
+    sites.push(...freshSites);
+
     // Find the existing site by name and replace it with the new site
     const index = sites.findIndex((s: Site) => s.name === site.name);
     if (index !== -1) {
@@ -34,24 +47,29 @@ export function setSiteConfig(site: Site): void {
         // Throw an error if the site is not found
         throw new Error(`Site ${site.name} not found`);
     }
-    fs.writeFileSync('sites.json', JSON.stringify(sites, null, 2));
+    // Convert Site instances to plain objects for JSON serialization
+    const sitesData = sites.map((s: Site) => ({
+        name: s.name,
+        url: s.url,
+        bearerToken: s.bearerToken,
+        username: s.username,
+        password: s.password,
+        scriptExecutorId: s.scriptExecutorId,
+        mailConfig: s.mailConfig,
+        useTunnel: s.useTunnel,
+        imapAccount: s.imapAccount,
+        senderAccount: s.senderAccount,
+        receiverAccount: s.receiverAccount,
+    }));
+    fs.writeFileSync(sitesJsonPath, JSON.stringify(sitesData, null, 2));
 }
 
 /**
  * Sign in to the application with admin credentials
  */
 export async function signInAsAdmin(page: Page, site: Site): Promise<void> {
-    // Get username from site or fallback to environment variable
-    const username = site.username || process.env.INSTANCE_USERNAME;
-    if (!username) {
-        throw new Error('Username is required. Provide it in the site object or set INSTANCE_USERNAME environment variable.');
-    }
-
-    // Get password from site or fallback to environment variable
-    const password = site.password || process.env.INSTANCE_PASSWORD;
-    if (!password) {
-        throw new Error('Password is required. Provide it in the site object or set INSTANCE_PASSWORD environment variable.');
-    }
+    const username = site.getUsername();
+    const password = site.getPassword();
 
     await page.goto(`${site.url}/login`);
     await page.getByRole('textbox', { name: 'Username' }).click();
@@ -154,8 +172,129 @@ export async function importProcess(page: Page, baseUrl: string, filePath: strin
     await expect(page).toHaveURL(new RegExp(`${baseUrl}/modeler/\\d+`), { timeout: 180_000 });
 }
 
+/**
+ * Import a collection
+ * @param page - The Playwright page object
+ * @param baseUrl - The base URL of the site
+ * @param filePath - The path to the collection file to import
+ */
+export async function importCollection(page: Page, baseUrl: string, filePath: string): Promise<void> {
+    await page.goto(`${baseUrl}/collections/import`);
+
+    // Wait for page to load completely
+    await page.waitForLoadState('networkidle');
+
+    const fileChooserPromise = page.waitForEvent('filechooser');
+    const firstBrowseButton = page.locator('#browse');
+    await firstBrowseButton.click();
+    const fileChooser = await fileChooserPromise;
+    fileChooser.setFiles(filePath);
+
+    await expect(page.getByRole('button', { name: 'Import' })).toBeEnabled();
+
+    await page.getByRole('button', { name: 'Import' }).click();
+
+    await expect(page).toHaveURL(`${baseUrl}/collections`);
+}
+
 export async function verifyImapSettings(site: Site): Promise<void> {
     const api = apiClient(site);
     const response = await api.post('/api/1.0/actions-by-email/test-imap-connection');
     expect(response.status).toBe(200);
+}
+
+/**
+ * Polls an API endpoint to find the latest asset created after a start time
+ * @param api - The Axios instance for API calls
+ * @param indexUrl - The API endpoint URL to poll
+ * @param partialName - Partial name to match in the asset's name field
+ * @param startTime - The time after which the asset must have been created
+ * @returns The found asset or null if not found after max attempts
+ */
+export async function findLatestAsset(
+    api: AxiosInstance,
+    indexUrl: string,
+    partialName: string,
+    startTime: Date
+): Promise<any | null> {
+    // Hard coded polling configuration
+    const maxTries = 10;
+    const waitMs = 5000;
+
+    for (let attempt = 1; attempt <= maxTries; attempt++) {
+        console.log(`Polling for new asset (attempt ${attempt}/${maxTries}) ...`);
+        const response = await api.get(indexUrl, { params: { order_by: 'id', order_direction: 'desc' } });
+        const items = response.data?.data || [];
+
+        console.log(`looking for ${partialName} in ${items.length} items with updated_at after ${startTime.toISOString()}`);
+        console.log("Items: ", items.slice(0, 3).map((item: any) => ({ name: item.name, id: item.id, updated_at: item.updated_at })));
+
+        // Find an item whose name includes the partial name
+        // and whose createdAt/created_at is after startTime
+        const found = items.find((item: any) => {
+            // Check both createdAt and created_at field names
+            const updatedAt = item.updated_at && new Date(item.updated_at);
+            return (
+                typeof item.name === 'string' &&
+                item.name.includes(partialName) &&
+                updatedAt &&
+                updatedAt.getTime() >= startTime.getTime()
+            );
+        });
+        console.log("Found: ", found ? found.name : "not found");
+
+        if (found) {
+            console.log("Found new asset:", found.name, found.id);
+            return found;
+        }
+
+        if (attempt < maxTries) {
+            await new Promise(res => setTimeout(res, waitMs));
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Polls an API endpoint to find the latest item by ID after executing a callback
+ * @param api - The Axios instance for API calls
+ * @param endpointUrl - The API endpoint URL to poll (e.g., '/api/1.0/collections')
+ * @param callback - Async function to execute (e.g., importCollection) before polling
+ * @returns The new ID if found, or null if not found after max attempts
+ */
+export async function findLatestById(
+    api: AxiosInstance,
+    endpointUrl: string,
+    callback: () => Promise<void>
+): Promise<number | null> {
+    // Get the current latest ID before executing the callback
+    const currentResponse = await api.get(endpointUrl, { params: { order_by: 'id', order_direction: 'desc' } });
+    let newestId = 0;
+    if (currentResponse.data.data.length > 0) {
+        newestId = currentResponse.data.data[0].id;
+    }
+    console.log("Newest ID: ", newestId);
+
+    // Execute the callback (e.g., importCollection)
+    await callback();
+
+    // Poll until we have a new id > newestId
+    const waitTime = 2000;
+    const maxTries = 5;
+    for (let attempt = 1; attempt <= maxTries; attempt++) {
+        const currentResponse = await api.get(endpointUrl, { params: { order_by: 'id', order_direction: 'desc' } });
+        if (currentResponse.data.data.length > 0) {
+            const latestId = currentResponse.data.data[0].id;
+            console.log("Latest ID: ", latestId);
+            if (latestId > newestId) {
+                console.log("Found new ID: ", latestId);
+                return latestId;
+            }
+        }
+        console.log("No new ID found, waiting for ", waitTime, "ms");
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+    }
+
+    return null;
 }

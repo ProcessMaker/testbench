@@ -1,4 +1,4 @@
-import { Site, Sites } from '../types/site';
+import { Site, Sites } from '../models/Site';
 
 /**
  * Type guard to check if an object is a valid Site

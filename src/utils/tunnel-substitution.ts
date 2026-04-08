@@ -94,7 +94,7 @@ export async function fetchTunnelUrls(
                         }
                     }
                 } catch (error) {
-                    console.log(`⚠️  Failed to fetch tunnel information from ${endpoint}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                    throw new Error(`⚠️  Failed to fetch tunnel information from ${endpoint}: ${error instanceof Error ? error.message : 'Unknown error'}`);
                 }
             }
 

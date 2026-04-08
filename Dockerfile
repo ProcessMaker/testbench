@@ -10,7 +10,7 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci
 
-# Copy source files
+# Copy source files except node_modules
 COPY . .
 
 # Build TypeScript

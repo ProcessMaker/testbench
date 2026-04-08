@@ -1,1 +1,99 @@
-[]
+[
+  {
+    "name": "local",
+    "url": "http://processmaker-b.test",
+    "bearerToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZWI3YTQwY2RjZTM5N2VhM2IyNzVhZTNlNDhiMWJhODczZjRhODNhNmM2OWM0MTE1NzI1OTFhNTFhNTQzNTU5M2Q4NzdhYTVmNmM4OWE3ZDkiLCJpYXQiOjE3NzA3NDQ1MDIuNTYwMTI1LCJuYmYiOjE3NzA3NDQ1MDIuNTYwMTI2LCJleHAiOjE4MDIyODA1MDIuNTU3OTMzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.FoNAOHFvHPPQRcDl57hWFiFLNOwNcR31AKcVWrcKqv8BQgWs3QMNgbDeFtKtc7l6R__uWqyikpZ2LohtLHfVEkCg1nZ9-fVIDIPGEs9zTPCtZ6BzPnT7ZVK5MAMvIZ5L9RIps9KotcrzvhOkZ7Y9zGJOOTZdMgJfSzFs8HReAe6VUaSwSbkolt5FoI1aeyhN5b5_0Ek_hLVw3csYEOFTec6ZhNkMVRYi8rJPv8Jm3oRDMtCiJNOakjTSLrorJMX4ECx6Z40G-62fJuzwIBgqdR5KEm_2tIaVyfUna5Emom23kAkU6LRSsAdFM1ngykzRGpjpkKxLsAuCuzRFn8MNriFMEs5c9rfiBvRXgft3dLtDrrt_hFPZth0UPy-GfJQV6n1hpe758odptESNq22zcbxmgD_4Ot4oG1X-wlOgB2gSZf9gKyrF1BbpRMY-8Htr-UUn5LqmdMdUDYp4xHZesdF_prPkztpX6_453oAnsuSnDiztjy4CcD6KkdNw_a3THgvh9jFl6p1uZW1bfGJVJf8B6gtuwq0Y2FSO0UMiK6tPMytlS_krJWUi7h6QfYRggSZjX5fgghpcSfVcwE4oJykqZEuznRwe-4iWmM_dcFRO9Pynu9sOnwcjWqLoN6YlVsv_FgVrCUpo_EUotDZoNfDUG86rKwsX7NDGMVWxZ6w",
+    "password": "admin",
+    "scriptExecutorId": 1,
+    "mailConfig": "dms.json",
+    "useTunnel": true,
+    "imapAccount": "abe-imap@example.test",
+    "senderAccount": "sender@example.test",
+    "receiverAccount": "receiver@example.test"
+  },
+  {
+    "name": "CI",
+    "url": "https://ci-d29c3b7c84.engk8s.processmaker.net",
+    "bearerToken": "",
+    "username": "admin",
+    "password": "qastm2026",
+    "scriptExecutorId": 1,
+    "mailConfig": "dms.json",
+    "useTunnel": true,
+    "imapAccount": "abe-imap@example.test",
+    "senderAccount": "sender@example.test",
+    "receiverAccount": "receiver@example.test"
+  },
+  {
+    "name": "CI1",
+    "url": "https://tenant-1.ci-d45e524a95.engk8s.processmaker.net",
+    "bearerToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDEwNjEwODczMThmNGM0M2U2ZGI4ZTY4MGE2NGI0NTBiNzA1ZmM4ZThlMDU2MTZkMWU0MjdmNmZmY2JkNzU0OGU2Y2I0MjU2YWE5NzUyZTMiLCJpYXQiOjE3NjU5MTc4MTEuNDc4Njc1LCJuYmYiOjE3NjU5MTc4MTEuNDc4NjgsImV4cCI6MTc5NzQ1MzgxMS40NzM1Nywic3ViIjoiMSIsInNjb3BlcyI6W119.RdjXC7jOj7JUyEre0exRy52iN3RUgyjC6Phm68vajqlaoZPBtFtM2ttStJQsfmQ2mhxlVpn0GUt5TpDmBSA-vxJh6aS4S_khgxIWnJk9rpLiq-___7H2PSHm7vOETlD0t94-REGpzXVI9Mh-IsH4_QO8jparL1q_ZlL7F8urCyCPaY33MbAnj0E8YWcnySzTDR5JLmCdplW1y0uGH_9_16qtSd2C0uPt6dI0JKV20Tji9-RtBTq4C4ClhrspMO7vQkhpaEzPK0ile80BakYeJ06hU6XnMOXOXKNGYpXTSWH0MhfVieqNyMMKFNNczXwzxcI73B05UPj259Lvwt0ZewRSzMLY5wXrKkoRo1ng_3ym-MudWn8B6DovxXSt05eppNuaVXqR1QNlo_FqP4M6TYWkLH6_F3B__27oxPhxwQUk7Sy9eUezA4GBti68__s89vELC85Vy3yjlfUVU8CZtiRm9T2Ssl3k0948L9RzHzR9EVMxVYAiyolf0ajL7ps1YwnF8DSViTGrIBI-U-9ExQ3ChVzVx-Gmk-nCU_AXBkTYS3y5Dn1dZ0raVwhX1A0qZntXAJ1aQwLx81EC8eAKTXSldWbRuXfmQ6VK13fNgOpoLPTwIlPo4sHiHcXwS9ehk5ryWxqOaHeRfAFnvbeMqgZDNQ_rUEaVzUaimI9kc7M",
+    "password": "qastm2025",
+    "scriptExecutorId": 1,
+    "mailConfig": "dms.json",
+    "useTunnel": true,
+    "imapAccount": "abe-imap-1@example.test",
+    "senderAccount": "sender-1@example.test",
+    "receiverAccount": "receiver-1@example.test"
+  },
+  {
+    "name": "CI2",
+    "url": "https://tenant-2.ci-d45e524a95.engk8s.processmaker.net",
+    "bearerToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiYjFiMTJjMjVlYThiZGVkNGJkNzczZTU2Yzg5NGYyNTRhMDEwODlhMTM5NDgwOWI5MjA3OGMyOGZiM2NmODVjNDRkNmMxZDE5YWFjODZjZmUiLCJpYXQiOjE3NjU5MTc3NDEuMzc0ODQ3LCJuYmYiOjE3NjU5MTc3NDEuMzc0ODUxLCJleHAiOjE3OTc0NTM3NDEuMzY5NDY1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.GBTj934sDBWUZq46i-ixlZQKsfpTSSTZainaFMGgQR7eYeS-OP_sXgl9JFNp6cKju5owFAd1imdjk4ZMQYQNieoLEx9jsqQs-ewXKPWmThzitDci3e-1yJZu2P94Qs6zreVQIqiUwiT9z6_WT5KxmKKR883sbwHuhLSbblOrQE-y66zu-epLLdvOcPTdkLQtyJDC1IZ9tQcxavsI9H4XxnJfuYKk1QBsRg6phtfJygw3AhYHXEOTbxiiekV4J_UgYNSQqHtHvXi-UxqXddixO8t0mb8j3F1ArPOXI1hpsjfRJJRGNbCdLS7bXMGw3SxHeBLd3C8r_nPKUTzn2pM2lZTgqBbWnWdlbon2WKmo9I27g2TgtWoajqMY9xR_o4cGrtOp-bMV5plOnUa-ABUIuzsgxSZ5t8lv6QvfKnFC34ITol1-rKJ72fLUcq2ojYpdYt751Mb_2q_6B-IP11YnhGEeNl1XobpndTHxoYPYF0FLHm0OvzDDMvbs8v-B1Kmz3WkgaeusUoKTD8V4YixoXEt2Xl-bf9GUh5L9WFjFDLcuEhg7d-dCcuUz8LNyBCGVlVZdaaTZL4U9qRU4DRl7BTgyzK8LU6uwTdyaX_MDWCta4xD-YZkWvfI4Z2VEL1zPg5-CWfas7meTYytQzXiKmggsV8NyPlvDOG6T9UjtmZA",
+    "password": "qastm2025",
+    "scriptExecutorId": 1,
+    "mailConfig": "dms.json",
+    "useTunnel": true,
+    "imapAccount": "abe-imap-2@example.test",
+    "senderAccount": "sender-2@example.test",
+    "receiverAccount": "receiver-2@example.test"
+  },
+  {
+    "name": "CI3",
+    "url": "https://tenant-3.ci-d45e524a95.engk8s.processmaker.net",
+    "bearerToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiZWZlNWJhMGViOTkxYmZmMzg5Yzg2ZGNhNGNiNDgzN2RhMjdkMWVhMzMzODQ4NTkwMThmY2RhMzRiNWVhMmY2ZTg4NWIxNjlhMTJjNWMyN2EiLCJpYXQiOjE3NjU5MTgwMjAuODExMTc2LCJuYmYiOjE3NjU5MTgwMjAuODExMTgxLCJleHAiOjE3OTc0NTQwMjAuODAwMzY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.m2dcSNHZrfUl5sGeg9lhDzDKCWFAVXMt4W1LfClOK8znbJKoMLZZ_TwvIwKVEJYg7fySZGwwCteBGG7F6t6_ZqmlGm7ZVQaHTDh4VwpRGKStVrVjXDpZhGmJRIhIe1eHReph5wjJz6mUV7DQB6VzVw_aF_DIVsPq40RAwbkYYtTu3f1yJ2mhg3e2hhrE0tora4FqnBmoH8pVrcHBHH_12BWzHmbi1Myd1fow2Pv3vxmWr1JGVpnTQP3beyDYYumATl-J4OzBPXqpWtUbCAvchEuRiUEK1YQdzkVFaUEBqDd42S6CXBdaJ5hFgVX533pY45E07VUAcvo0MJSeKNIiy5SgqYcB0fBsIec4coCcdRLqilS82jQn7SDCXEsu39wdPuklmq22VAZ-TYtsQIsYXowfO9APAKk64guMKJO1vIk_h_YQ9fw9N6sMRCc6vJCk8Hfzb_98w6SHbm-G3i_wWA6H-iZUsz2KnFK7mxA9IdMcLSYTwIs7hkkUMxLPIkFzBbUYZ8juybLV3XKkkFbMJowzpQHlaCVgKbjbh8gsp4vUEc7-hTmzqjQ999AWCwmmZzrKTrNon7cb5kWZruI8uJWc_ntqmjJAGbsOnKZSA1WdNAoOzsYmk710chuXEIA091IxbzprqcfEox0EItSYrbsX7-3WAe5C3IUe_2r3sa0",
+    "password": "qastm2025",
+    "scriptExecutorId": 1,
+    "mailConfig": "dms.json",
+    "useTunnel": true,
+    "imapAccount": "abe-imap-3@example.test",
+    "senderAccount": "sender-3@example.test",
+    "receiverAccount": "receiver-3@example.test"
+  },
+  {
+    "name": "TT1",
+    "url": "https://testtenant01.qa.processmaker.net",
+    "bearerToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiOWQwZTg3OGNlMzdlNzU2MTkzNGNiNjRmYTkyYjA0YjBkOWYwNmMyZDdlODZlMjVjOTQ1OWFiYWFiZjY1ZjIxOGFmYWZkYTJhYzA0N2VjNzYiLCJpYXQiOjE3NjYwMjMyNTQuODAxNjU5LCJuYmYiOjE3NjYwMjMyNTQuODAxNjYyLCJleHAiOjE3OTc1NTkyNTQuNzk3NDAxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.fphatmqJ3O651kB8CpVRhTFnV5Cj4H9mJ3Y5JDCUnWPc_X23nPIqQF2BO5iKSd7EenGZe9y3dWLiKMryxsD3qup3HHuoJEaaGXc9_22MYKWaUmmY7xxwDEQXIWrxv2Q3dr5Hgx7K9WJz_VqOheW49ArldcRhMHd3oFUzIVkzY063Lea98UGWsqnw54WEOHuIMg2CQK9sTaBvHI5QNHePSsDOFK2L98MlrBdiCKQ9cxtJ0pCJEwf0q0yVwBvNa1eZ3vUyZ-bencsayfe7Htv0tN5qFXYn1qEFfPFZ8Wp4fMrvBZviLeE0aiLIF1pkA8Xghwz7LvGtuJTYycq8sJLkD1C25dLRZFUEQFbcI-AGTRvBGMNSFcqPJRLoxgUNyiI6IJwrVQxNui-NkkoN32gIjxlUoDkD2gQ9-5wS6oSn5jI-nuFA8j8LnZrKpKzI0ubr1RUtWbkEB-5olyHIPj1fOTOg1G2WFwD6FsQ4_0IaSlS4Zk5bkiNE-Nos0CL2kN51vtxmsk85-GBXDF5zswz8h4gASc7vE058RQZz4OV5qddJcJFdvOwwzz1OLwppwSyGSdJQGpyNOpo-LjD0q8Zwha2Hba8cb7ag9HuHyUv3__rokzi0S8EMTZAtykBptWQA1Z3NityEVKdJBMTeaPe7AHEumAzr11LXCz5W_z5HXwE",
+    "password": "thEYxyy8tYgWEuQkxzJq",
+    "scriptExecutorId": 1,
+    "mailConfig": "dms.json",
+    "useTunnel": true,
+    "imapAccount": "abe-imap-1@example.test",
+    "senderAccount": "sender-1@example.test",
+    "receiverAccount": "receiver-1@example.test"
+  },
+  {
+    "name": "TT2",
+    "url": "https://testtenant02.qa.processmaker.net",
+    "bearerToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiMWIzMDdlZTY5YWM0M2QwYjNmMTE3MTE3NzdlNDA4MzBmNzM2YTIwZmI4M2ZiZDdlYzc0YzVlNjIyNjU5MmU3OWNiNjJjODQ4ZjUzZGIyNTMiLCJpYXQiOjE3NjYwOTM0OTMuMTg5MDM1LCJuYmYiOjE3NjYwOTM0OTMuMTg5MDM4LCJleHAiOjE3OTc2Mjk0OTMuMTg1MDk5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.QJ-4KJO-h_mmK5tT15vWsYBba6zNUmXs2-a-vuBwDA17C5aS-fWuYSw_A6-q2D1OzYbdKiUUWV-F5g8kltDbd_2GZ1NKFYOX23LaYh17sNZmodxkWlQcZNZqZYbFF0-D78ewkY8MgjEUZu1po7Ps7llz0635DfwWClcB72DK7ygZ5Uh3P6zPvqYRD6eICWLYapXvLwndpToHjLQCqTbYTcpkRwXRIfdVRiU5idr_V5nvIiyUTp4Xha6ADTsWux6Kx-31FDYBN7xTpCYHc3pyD6zyRuczrLgGE9OeelFD2YL7pjcsCKuhsXu5XCI6d-ujNV8RjG6FLNgFwQB33eANhvIj5OZ_eLBXsPNpgaVZH9zyGcs-0rC4IoaTfjADXJeMThf2XdE4GS7-v8s83CcxDGBCgW_4aT1BCT5ubccmZ6ZIGraZmsw_yC_FR9dz67xGWgnZvidZrLEyyk67IHZ1NCEFkLZK_l4SzgW6YfDESLENLUP0dQwXWRlSlrHqzCsTziRxZiP7NW41hSj2AesloRD0xZkD_SUjZG6iux-mZ-UlmzhPzslKacGiU_iOoC71dN71TOlOBtMfFy9X7X6eJJxNrlSFLaIiTyvqM67c1MpWVZBYNREWxpRWN_Ul7Yk3nk0XOhmSvaziZC111Y8YZ15hnyALhKSQ9xh4Jjcybys",
+    "password": "thEYxyy8tYgWEuQkxzJq",
+    "scriptExecutorId": 3,
+    "mailConfig": "dms.json",
+    "useTunnel": true,
+    "imapAccount": "abe-imap-2@example.test",
+    "senderAccount": "sender-2@example.test",
+    "receiverAccount": "receiver-2@example.test"
+  },
+  {
+    "name": "TT3",
+    "url": "https://testtenant03.qa.processmaker.net",
+    "bearerToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiODczZDhiNTNhMzgzMDE3NjRmYzFiM2I1MWFlM2ZmMzZjMjY2MjMzOTBhNDQzZWUxNDc0ZGFkNzQwN2I5MzcwMmJmZTYxY2Q3YjRlMjA5YWUiLCJpYXQiOjE3NjYwMjMyODIuNDI1NDIzLCJuYmYiOjE3NjYwMjMyODIuNDI1NDI2LCJleHAiOjE3OTc1NTkyODIuNDIwNzc4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.pOE3dlevBZYpcPv91P_2YjKNAzGMGFmAF5YSPlPEK0WsQE0cUOlIiP87k5yuBR6TKonL3BpAcsl_t4mkZdP5ZWBPzRo_OX4u8ygvc6M9XeYhuiVWuY8Pi6y2pqVPbPhJem30Z-v_vyGpxmb0S4HpO6z_x2TPEfq5taSX97A2OSwCpru9M7KDTY0JSa2-1PTZegnU31p7Ld9Ui2xGj9UtESir4AsemYmDhHGmAnFWvVNLyq1NWKq0qn9H3dllbxLFIBuXIO9DgBj-PoW3YSkboZQIKDtytpQtjxx3dnHUqXxDea76AEOh8BvGcDKS5S7bkdROKMAFQHaYlzne2UxtuSlcmxxglh_71Avb6jziA8tl0qdl3gG0E87OM1YmCZY5k5hTtfV1W87PWSAKYCsBGSX9BaAwtnhLsoeQnacsZlU-odV2gio8vM7YpH1cR7ZMBfwqjh_L3j6GI2hxoIJDhDRQ2pV3PwV-Qjnv4YMr0HUfRRM077kBWyjPjStVSxELx-TitCnp0F_FDYgBWF_AkdGjnkNCOWqf2o8KMa_x_RErxuGOzgvn8r7QNwGroz_jy6eIvjryMSLBuH44ciWIgqgRoo2N2vI3lLQKs0hqyUGg9TGPqAX3nPnmcyvEowRPVl-AuEr5Kw3ouoVTJPmKuKpyyHiXg5x48mv6T_MwN2M",
+    "password": "thEYxyy8tYgWEuQkxzJq",
+    "scriptExecutorId": 1,
+    "mailConfig": "dms.json",
+    "useTunnel": true,
+    "imapAccount": "abe-imap-3@example.test",
+    "senderAccount": "sender-3@example.test",
+    "receiverAccount": "receiver-3@example.test"
+  }
+]

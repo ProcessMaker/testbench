@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import { getAvailableActions, loadAction } from '../utils/action-loader';
 import { loadSitesFromPath } from '../utils/sites-loader';
-import { Site } from '../types/site';
+import { Site } from '../models/Site';
 
 export const updateServerCommand = new Command('update-server')
     .description('Update the remote server environment using API calls')
