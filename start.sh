@@ -29,6 +29,7 @@ docker compose down -v --remove-orphans
 # We need to do this separately (using -d) so that testbench exits with the correct code
 # and we're not waiting on services that are long running
 docker compose up -d tunnel mailserver
+docker compose logs generate-certs
 
 # docker compose wait tunnel - `docker wait tunnel` doesn't work for some reason.
 # Because it doesn't work, I removed the healthcheck from docker-compose.yml.
