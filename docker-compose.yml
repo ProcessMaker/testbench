@@ -3,12 +3,15 @@ services:
     image: smallstep/step-ca:latest
     container_name: generate-certs
     volumes:
-      - ${CONTEXT_PATH}/docker-mailserver/ssl/:/tmp/step-ca
+      - ${CONTEXT_PATH}/certs/:/tmp/step-ca
       - ${CONTEXT_PATH}/generate-certs.sh:/tmp/generate-certs.sh
     user: ${USER_GROUP}
     working_dir: /tmp/step-ca
     entrypoint: ["/bin/sh", "/tmp/generate-certs.sh"]
     restart: "no"
+    environment:
+      - DOCKER_STEPCA_INIT_NAME=Smallstep Root CA
+      - DOCKER_STEPCA_INIT_DNS_NAMES=mail.example.test,example.test,localhost
   tunnel:
     build:
       dockerfile: Dockerfile.tunnel
@@ -19,58 +22,76 @@ services:
       - "4301:4301"
     environment:
       - TCP_TUNNELS=${TCP_TUNNELS}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4300/urls"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-      start_period: 10s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:4300/urls"]
+    #   interval: 5s
+    #   timeout: 3s
+    #   retries: 10
+    #   start_period: 10s
+    depends_on:
+      create-accounts:
+        condition: service_completed_successfully
   mailserver:
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
     stop_grace_period: 5s
     container_name: mailserver
     hostname: mail.example.test
-    env_file: ${CONTEXT_PATH}/mailserver.env
     ports:
       - "587:587" # ESMTP (explicit TLS => STARTTLS)
       - "993:993" # IMAP4 (implicit TLS)
     volumes:
-      # - ${CONTEXT_PATH}/docker-mailserver-var/mail-data/:/var/mail/
-      # - ${CONTEXT_PATH}/docker-mailserver-var/mail-state/:/var/mail-state/
-      # - ${CONTEXT_PATH}/docker-mailserver-var/mail-logs/:/var/log/mail/
-
-      - ${CONTEXT_PATH}/docker-mailserver/:/tmp/docker-mailserver/
-      # - ${CONTEXT_PATH}/postfix-accounts.cf:/tmp/docker-mailserver/postfix-accounts.cf
-      # - ${CONTEXT_PATH}/certs/:/tmp/docker-mailserver/ssl/
-
+      - ${CONTEXT_PATH}/certs/:/tmp/docker-mailserver/ssl/
       - /etc/localtime:/etc/localtime:ro
+    environment:
+      - SSL_TYPE=self-signed
     restart: always
+    depends_on:
+      generate-certs:
+        condition: service_completed_successfully
     healthcheck:
       test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"
+      interval: 5s
       timeout: 3s
-      retries: 0
+      retries: 5
+      start_period: 45s
+  create-accounts:
+    image: docker:24-cli
+    container_name: create-accounts
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - apk add --no-cache bash >/dev/null && cd /work && ./create-accounts.sh
+    volumes:
+      - ${CONTEXT_PATH}/:/work
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      mailserver:
+        # Do not use service_healthy: Dovecot (and sometimes the :smtp check) stays
+        # down until accounts exist, while create-accounts waits for healthy — deadlock.
+        condition: service_started
+    restart: "no"
   testbench:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: testbench
     environment:
-      - MULTITENANCY=${MULTITENANCY}
-      - INSTANCE=${INSTANCE}
-      - SITE_NAME=${SITE_NAME}
+      - URL=${URL}
+      - SITE_NAME=CI
       - INSTANCE_USERNAME=admin
       - INSTANCE_PASSWORD=${INSTANCE_PASSWORD}
-      - TCP_TUNNELS=${TCP_TUNNELS}
-      - TUNNEL_SERVICE_URL=${TUNNEL_SERVICE_URL}
+      - TCP_TUNNELS=${TCP_TUNNELS:-mailserver:587 mailserver:993}
+      - TUNNEL_SERVICE_URL=${TUNNEL_SERVICE_URL:-http://tunnel}
     volumes:
-      - ./sites.json:/app/sites.json
+      # - ./sites.json:/app/sites.json
       - ./playwright-report:/app/playwright-report
       - ./test-results:/app/test-results
       # for making changes to code without rebuilding the container
-      - ./src:/app/src
-    depends_on:
-      mailserver:
-        condition: service_healthy
-      tunnel:
-        condition: service_healthy
-    restart: unless-stopped
+      # - ./src:/app/src
+    # depends_on:
+    #   create-accounts:
+    #     # Accounts must exist before tests; mailserver health can lag Dovecot until setup runs.
+    #     condition: service_completed_successfully
+    #   tunnel:
+    #     # Tunnel healthcheck hits /urls once reverse tunnels to mail ports are up.
+    #     condition: service_healthy
+    restart: "no"

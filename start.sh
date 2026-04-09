@@ -5,9 +5,7 @@ missing_vars=()
 
 required_env_vars=(
   "CONTEXT_PATH"
-  "GITHUB_TOKEN"
-  "MULTITENANCY"
-  "INSTANCE"
+  "URL"
   "SITE_NAME"
   "INSTANCE_PASSWORD"
 )
@@ -26,18 +24,25 @@ if [ "${#missing_vars[@]}" -ne 0 ]; then
   exit 1
 fi
 
-export USER_GROUP=$(id -u):$(id -g)
-export TCP_TUNNELS="mailserver:587 mailserver:993"
-export TUNNEL_SERVICE_URL="http://tunnel"
-
-mkdir -p context/docker-mailserver
-rm -rf context/docker-mailserver/* || true
-
 docker compose down -v --remove-orphans
-docker compose run generate-certs
 
-# Run on Github Actions
-# docker compose up mailserver testbench tunnel --abort-on-container-exit --exit-code-from testbench
+# We need to do this separately (using -d) so that testbench exits with the correct code
+# and we're not waiting on services that are long running
+docker compose up -d tunnel mailserver
 
-# Run locally
-docker compose up mailserver tunnel
+# docker compose wait tunnel - `docker wait tunnel` doesn't work for some reason.
+# Because it doesn't work, I removed the healthcheck from docker-compose.yml.
+max_attempts=10
+attempt=1
+until curl -sf http://localhost:4300/urls >/dev/null; do
+  if [ $attempt -ge $max_attempts ]; then
+    echo "Tunnel error"
+    exit 1
+  fi
+  sleep 1
+  attempt=$((attempt + 1))
+done
+
+# We're good to go once tunnels are ready because the tunnels service
+# won't start until the other services are ready.
+docker compose run --rm testbench

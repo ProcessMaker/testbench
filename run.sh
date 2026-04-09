@@ -7,9 +7,7 @@ if [ -z "$SITE_NAME" ]; then
     exit 1
 fi
 
-# npm run ci-sites
-
-
+npm run ci-sites
 
 npm run debug-tunnels
 

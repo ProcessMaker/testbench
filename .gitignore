@@ -54,8 +54,6 @@ playwright/.cache/
 /playwright/.auth/
 
 
-services/dms
-services/certs
 gmail.json
 sites.json.bak
 .envrc
@@ -63,3 +61,5 @@ sites.json
 
 __pycache__/
 venv/
+
+context/certs/
