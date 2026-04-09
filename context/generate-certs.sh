@@ -1,4 +1,5 @@
 #! /bin/sh
+set -eux
 mkdir -p demoCA
 
 step certificate create "Smallstep Root CA" "demoCA/cacert.pem" "demoCA/cakey.pem" \
